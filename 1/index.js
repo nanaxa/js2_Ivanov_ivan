@@ -52,3 +52,43 @@ class GoodsList {
 const list = new GoodsList();
 list.fetchGoods();
 list.render();
+
+//Пустые классы для корзины
+/* список продуктов(массив) в корзине ProductList и их сумарная стоимость TotalPrice */
+class CartList {
+    constructor() {
+        this.ProductList = [];//массив товара в корзине
+        //метод подсчета суммы в корзине
+        this.TotalPrice = () => {
+            let totalSum = 0;
+            this.ProductList.forEach((Product) => {if (product.price !=undefined || product.price != 0 ) {
+                totalSum= totalSum+product.price;
+            }
+                
+            }
+            )
+        }
+        
+        }
+    
+}   
+
+//2. Добавьте для GoodsList метод, определяющий суммарную стоимость всех товаров.
+
+GoodsList.prototype.EndSum = () {
+    let sum = 0;
+    this.goods.forEach((good) => {
+        if (good.price!==undefined ) {
+            sum+=parseInt(good.price);
+            return sum;
+        }
+    })
+}
+
+//метод подсчета суммы товаров в корзине со скидкой
+CartList.prototype.TotalSum =()=> {
+    this.Discount = Discount;
+    this.TotalPrice = Math.round
+(TotalPrice/100*Discount);
+}
+//
