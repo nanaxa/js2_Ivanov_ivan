@@ -30,6 +30,7 @@
     border: 1px solid black;
     border-radius: 15px;
     text-align: center;    
+    cursor: pointer;
 }
 .chat_svg {
     font-size: 59px;
@@ -65,4 +66,7 @@
     margin: 19px 25px 3px 25px;
     min-height: 65px;
     border-radius: 5px;    
+}
+.small-height {
+    max-height:20px;
 }
