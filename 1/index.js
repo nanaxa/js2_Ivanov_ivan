@@ -21,8 +21,8 @@ class GoodsItem {
     }
     render() {
         return `<div class="goods-item">
-                    <h3 class="title goods-title">${this.title}</h3>
-                    <p>${this.price} ₽</p>
+                    <span class="title goods-title">${this.title}</span>
+                    <span class="goods-price">${this.price} ₽</span>
                 </div>`;
     }
 }
@@ -75,7 +75,7 @@ class CartList {
 
 //2. Добавьте для GoodsList метод, определяющий суммарную стоимость всех товаров.
 
-GoodsList.prototype.EndSum = () {
+/*GoodsList.prototype.EndSum = () {
     let sum = 0;
     this.goods.forEach((good) => {
         if (good.price!==undefined ) {
@@ -84,7 +84,7 @@ GoodsList.prototype.EndSum = () {
         }
     })
 }
-
+*/
 //метод подсчета суммы товаров в корзине со скидкой
 CartList.prototype.TotalSum =()=> {
     this.Discount = Discount;
