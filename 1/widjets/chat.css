@@ -167,3 +167,6 @@
 .chat-widget.chat-widget_closed .chat-widget__welcome-message {
     display: block;
 }
+chat-widget__user-name, chat-widget__user-position {
+    color: #ccc;
+}

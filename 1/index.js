@@ -1,19 +1,22 @@
-/*const goods = [
-    { title: "Shirt", price: 100 },
-    { title: "Jeans", price: 200 },
-    { title: "T-Shirt", price: 70 },
-     {title: "Cap", price: 50 },
-];
+const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+function makeGETRequest(url, callback) {
+    let xhr;
+    if (window.XMLHttpRequest) {
+        xhr = new window.XMLHttpRequest();
+    } else {
+        xhr = new window.ActiveXObject('Microsoft.XMLHTTP');
+    }
 
-const renderGoodsItem = (title, price) => {
-    return `<div class='goods-item'><h3>${title}</h3><p>${price}</p></div>`
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const body = JSON.parse(xhr.responseText);
+            callback(body)
+        }
     };
+    xhr.open('GET', url);
+    xhr.send();
+}
 
-const renderGoodsList = (list) => {
-    const goodsList = list.map(item => renderGoodsItem(item.title, item.price)).join(` `);
-    document.querySelector(`.goods-list`).innerHTML = goodsList;
-} 
-renderGoodsList(goods);*/
 class GoodsItem {
     constructor(title = 'Без имени', price = '') {
         this.title = title;
@@ -21,8 +24,8 @@ class GoodsItem {
     }
     render() {
         return `<div class="goods-item">
-                    <span class="title goods-title">${this.title}</span>
-                    <span class="goods-price">${this.price} ₽</span>
+                    <h3 class="title goods-title">${this.title}</h3>
+                    <p>${this.price} ₽</p>
                 </div>`;
     }
 }
@@ -31,65 +34,45 @@ class GoodsList {
     constructor() {
         this.goods = [];
     }
-    fetchGoods()  {
-        this.goods = [
-            { title: 'Shirt', price: 150 },
-            { title: 'Socks', price: 150 },
-            { title: 'Jacket', price: 150 },
-            { title: 'Shoes', price: 150 },
-        ];
+    fetchGoods(cb)  {
+        makeGETRequest(`${API_URL}/catalogData.json`, (goods) => {
+            this.goods = goods;
+            cb();
+        });
+    }
+    totalPrice() {
+        return this.goods.reduce((accum, item) => {
+            if (item.price) accum += item.price;
+            return accum;
+        }, 0);
     }
     render() {
         let listHtml = '';
         this.goods.forEach(good => {
-            const goodItem = new GoodsItem(good.title, good.price);
+            const goodItem = new GoodsItem(good.product_name, good.price);
             listHtml += goodItem.render();
         });
         document.querySelector('.goods-list').innerHTML = listHtml;
     }
 }
 
+class Cart extends GoodsList {
+    constructor(props) {
+        super(props);
+    }
+    clean() {}
+    incGood() {}
+    decGood() {}
+}
+
+class CartItem extends GoodsItem {
+    constructor(props) {
+        super(props);
+    }
+    delete() {}
+}
+
 const list = new GoodsList();
-list.fetchGoods();
-list.render();
-
-//Пустые классы для корзины
-/* список продуктов(массив) в корзине ProductList и их сумарная стоимость TotalPrice */
-class CartList {
-    constructor() {
-        this.ProductList = [];//массив товара в корзине
-        //метод подсчета суммы в корзине
-        this.TotalPrice = () => {
-            let totalSum = 0;
-            this.ProductList.forEach((Product) => {if (product.price !=undefined || product.price != 0 ) {
-                totalSum= totalSum+product.price;
-            }
-                
-            }
-            )
-        }
-        
-        }
-    
-}   
-    /*ПОЧЕМУ ТО НЕ РАБОТАЕТ КОД, ЕСЛИ РАСКОМЕНТИРОВАТЬ КОД КОТОРЫЙ НИЖЕ НАДО РАЗБИРАТЬСЯ*/
-
-//2. Добавьте для GoodsList метод, определяющий суммарную стоимость всех товаров.
-
-/*GoodsList.prototype.EndSum = () {
-    let sum = 0;
-    this.goods.forEach((good) => {
-        if (good.price!==undefined ) {
-            sum+=parseInt(good.price);
-            return sum;
-        }
-    })
-}
-*/
-//метод подсчета суммы товаров в корзине со скидкой
-CartList.prototype.TotalSum =()=> {
-    this.Discount = Discount;
-    this.TotalPrice = Math.round
-(TotalPrice/100*Discount);
-}
-//
+list.fetchGoods(() => {
+    list.render();
+});
