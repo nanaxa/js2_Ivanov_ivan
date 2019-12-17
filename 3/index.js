@@ -42,7 +42,7 @@ class GoodsItem {
                 </div>`;
     }
 }
-
+//coment
 class GoodsList {
     constructor() {
         this.goods = [];
